@@ -2,11 +2,13 @@
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <style> circle {fill: lightblue; stroke: black;} </style>
 <body onload='init()'>
-<svg width=300 height=300>
+<svg width=1000 height=1000>
 </svg>
 <script>
 async function init() {
 const data = await d3.csv('avocado.csv');
+ var width = 500;
+ var height = 1000;
 
   var dataByRegion = d3.nest()
   .key(function(d) { return d.region; })
@@ -27,8 +29,8 @@ var node = d3.select('svg').append("g")
   .enter()
   .append("circle")
     .attr("r", function(d) {return +d.value.avg*25;})
-    .attr("cx", 150)
-    .attr("cy", 150)
+    .attr("cx", 500)
+    .attr("cy", 500)
     .style("fill", "#69b3a2")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#69a2b2")
@@ -36,7 +38,7 @@ var node = d3.select('svg').append("g")
 
 // Features of the forces applied to the nodes:
 var simulation = d3.forceSimulation()
-    .force("center", d3.forceCenter().x(150).y(150)) // Attraction to the center of the svg area
+    .force("center", d3.forceCenter().x(500).y(500)) // Attraction to the center of the svg area
     .force("charge", d3.forceManyBody().strength(0.5)) // Nodes are attracted one each other of value is > 0
     .force("collide", d3.forceCollide().strength(.01).radius(30).iterations(1)) // Force that avoids circle overlapping
 
