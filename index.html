@@ -21,15 +21,13 @@
   console.log(dataByRegion);
  
 
- d3.select("svg")
+var svg = d3.select("svg")
 .attr("width",width + 2*margin)
-.attr("height",height + 2*margin)
-.append("g")
-.attr("transform","translate("+margin+","+margin+")")
+.attr("height",height + 2*margin);
+
  
    // Initialize the circle: all located at the center of the svg area
-var node = d3.select('svg')
-   .selectAll(".node")
+var node = svg.selectAll(".node")
    .data(dataByRegion)
    .enter().append("g")
    .attr("class", "node");
