@@ -27,7 +27,7 @@ const data = await d3.csv('avocado.csv');
   .attr('cy', function(d,i) {return d.TotalBags/50000;});
   
   // Initialize the circle: all located at the center of the svg area
-var node = svg.append("g")
+var node = d3.select('svg').append("g")
   .selectAll("circle")
   .data(dataByRegion)
   .enter()
