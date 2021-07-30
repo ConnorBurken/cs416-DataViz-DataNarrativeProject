@@ -6,7 +6,7 @@
 </svg>
 <script>
 async function init() {
-const data = await d3.tsv('https://redfin-public-data.s3-us-west-2.amazonaws.com/redfin_covid19/weekly_housing_market_data_most_recent.tsv');
+const data = await d3.csv('avocados.csv');
 d3.select('body').selectAll('p').data(data).enter().append('p').html(function(d,i) {return 'Make ' + d;}); 
 
 }
