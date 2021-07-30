@@ -28,11 +28,12 @@
 .attr("transform","translate("+margin+","+margin+")")
  
    // Initialize the circle: all located at the center of the svg area
-var node = d3.select('svg').append("g")
-  .selectAll("circle")
-  .data(dataByRegion)
-  .enter()
-  .append("circle")
+var node = d3.select('svg')
+   .data(dataByRegion)
+   .enter().append("g")
+   .attr("class", "node");
+
+node.append("circle")
     .attr("r", function(d) {return +d.value.avg*15;})
     .attr("cx", 500)
     .attr("cy", 500)
@@ -42,8 +43,7 @@ var node = d3.select('svg').append("g")
     .style("stroke-width", 4);
 
 node.append("svg:text")
-    .attr("dx", function(d){return 500-((+d.value.avg*15)/2)})
-    .attr("dx", function(d){return 500-((+d.value.avg*15)/2)})
+    .attr("transform", "translate(0,6)")
     .text("Test");
     
 
