@@ -39,7 +39,7 @@ node.append("circle")
 
 node.append("svg:text")
     .attr("transform", "translate(0,6)")
-    .text("Test");
+    .text(function(d){return d.key;});
     
 
   // Features of the forces applied to the nodes:
