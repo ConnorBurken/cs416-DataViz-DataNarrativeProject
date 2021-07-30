@@ -15,7 +15,17 @@ d3.select('svg').selectAll('circle')
   .attr('cy', function(d,i) {return d.TotalBags/50000;});
   
  
-dataByRegion = d3.group(data, d => d.region);
+  var dataByRegion = d3.nest()
+  .key(function(d) { return d.region; })
+  .rollup(function(v) { return {
+    count: v.length,
+    total: d3.sum(v, function(d) { return d.AveragePrice; }),
+    avg: d3.mean(v, function(d) { return d.AveragePrice; })
+  }; })
+  .entries(data);
+  
+  console.log(dataByRegion);
+  
 
   
 
