@@ -6,6 +6,10 @@
 </svg>
 <script>
 async function init() {
+ const data = await d3.csv('avocado.csv');
+ var width = 1000;
+ var height = 1000;
+ var margin = 50;
 
   var dataByRegion = d3.nest()
   .key(function(d) { return d.region; })
@@ -17,13 +21,9 @@ async function init() {
   .entries(data);
   
   console.log(dataByRegion);
+}
  
 
- const data = await d3.csv('avocado.csv');
- var width = 1000;
- var height = 1000;
- var margin = 50;
- 
  d3.select("svg")
 .attr("width",width + 2*margin)
 .attr("height",height + 2*margin)
@@ -59,7 +59,6 @@ simulation
           .attr("cy", function(d){ return d.y; })
     }); 
   
-}
 </script>
 </body>
 </html>
