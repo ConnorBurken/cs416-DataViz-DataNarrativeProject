@@ -35,8 +35,6 @@ var node = d3.select('svg')
 
 node.append("circle")
     .attr("r", function(d) {return +d.value.avg*15;})
-    .attr("cx", 500)
-    .attr("cy", 500)
     .style("fill", "#69b3a2")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#69a2b2")
