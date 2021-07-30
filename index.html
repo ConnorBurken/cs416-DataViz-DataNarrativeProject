@@ -7,7 +7,7 @@
 <script>
 async function init() {
 const data = await d3.csv('avocado.csv');
-d3.select('body').selectAll('p').data(data).enter().append('p').html(function(d,i) {return 'Make ' + d;}); 
+d3.select('body').selectAll('p').data(data).enter().append('p').html(function(d,i) {return 'Date: ' + d.Date + ' AveragePrice: ' + d.AveragePrice;}); 
 
 }
 </script>
