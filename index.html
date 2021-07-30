@@ -10,7 +10,7 @@ const data = await d3.csv('avocado.csv');
 d3.select('body').selectAll('circle')
   .data(data).enter()
   .append('circle')
-  .setAttribute('r', function(d,i) {return d.AveragePrice;}); 
+  .attr('r', function(d,i) {return d.AveragePrice;}); 
 
 }
 </script>
