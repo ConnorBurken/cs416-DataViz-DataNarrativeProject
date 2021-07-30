@@ -10,7 +10,9 @@ const data = await d3.csv('avocado.csv');
 d3.select('svg').selectAll('circle')
   .data(data).enter()
   .append('circle')
-  .attr('r', function(d,i) {return d.AveragePrice;}); 
+  .attr('r', function(d,i) {return d.AveragePrice;})
+  .attr('cx', function(d,i) {return d.TotalVolume/200000;})
+  .attr('cy', function(d,i) {return d.TotalBags/50000;});
 
 }
 </script>
