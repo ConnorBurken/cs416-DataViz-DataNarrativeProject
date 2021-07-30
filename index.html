@@ -6,16 +6,6 @@
 </svg>
 <script>
 async function init() {
-const data = await d3.csv('avocado.csv');
- var width = 1000;
- var height = 1000;
- var margin = 50;
- 
- d3.select("svg")
-.attr("width",width + 2*margin)
-.attr("height",height + 2*margin)
-.append("g")
-.attr("transform","translate("+margin+","+margin+")")
 
   var dataByRegion = d3.nest()
   .key(function(d) { return d.region; })
@@ -27,9 +17,22 @@ const data = await d3.csv('avocado.csv');
   .entries(data);
   
   console.log(dataByRegion);
-  
-  
-  // Initialize the circle: all located at the center of the svg area
+ 
+
+} 
+
+ const data = await d3.csv('avocado.csv');
+ var width = 1000;
+ var height = 1000;
+ var margin = 50;
+ 
+ d3.select("svg")
+.attr("width",width + 2*margin)
+.attr("height",height + 2*margin)
+.append("g")
+.attr("transform","translate("+margin+","+margin+")")
+ 
+   // Initialize the circle: all located at the center of the svg area
 var node = d3.select('svg').append("g")
   .selectAll("circle")
   .data(dataByRegion)
@@ -42,9 +45,7 @@ var node = d3.select('svg').append("g")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#69a2b2")
     .style("stroke-width", 4)
-
-
- // Features of the forces applied to the nodes:
+  // Features of the forces applied to the nodes:
 var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter().x(500).y(500)) // Attraction to the center of the svg area
     .force("charge", d3.forceManyBody().strength(0.5)) // Nodes are attracted one each other of value is > 0
@@ -59,8 +60,6 @@ simulation
           .attr("cx", function(d){ return d.x; })
           .attr("cy", function(d){ return d.y; })
     });  
-
-} 
 </script>
 </body>
 </html>
