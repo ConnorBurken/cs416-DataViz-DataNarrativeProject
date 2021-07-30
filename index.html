@@ -5,8 +5,7 @@
 <svg width=1000 height=1000>
 </svg>
 <script>
-async function init() {
- const data = await d3.csv('avocado.csv');
+ const data = d3.csv('avocado.csv').then(function(data){
  var width = 1000;
  var height = 1000;
  var margin = 50;
@@ -21,7 +20,6 @@ async function init() {
   .entries(data);
   
   console.log(dataByRegion);
-}
  
 
  d3.select("svg")
@@ -58,7 +56,7 @@ simulation
           .attr("cx", function(d){ return d.x; })
           .attr("cy", function(d){ return d.y; })
     }); 
-  
+ });
 </script>
 </body>
 </html>
