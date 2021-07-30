@@ -42,7 +42,7 @@ var node = d3.select('svg').append("g")
     .style("stroke-width", 4);
 
 node.append("text")
-    .attr("transform", "translate(0,6)")
+    .attr("dx", function(d){return -((+d.value.avg*15)/2)})
     .text("Test");
     
 
