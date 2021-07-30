@@ -14,11 +14,10 @@ d3.select('svg').selectAll('circle')
   .attr('cx', function(d,i) {return d.TotalVolume/200000;})
   .attr('cy', function(d,i) {return d.TotalBags/50000;});
   
-d3.select('body').selectAll('p')
-  .data(data).enter()
-  .append('p')
-  .html(function(d,i) {return 'Average Price: ' + d.AveragePrice + 'Total Volume: ' + d.TotalVolume + 'Total Bags: ' + d.TotalBags;})
+ 
+dataByRegion = d3.group(data, d => d.region);
 
+  
 
 }
 </script>
