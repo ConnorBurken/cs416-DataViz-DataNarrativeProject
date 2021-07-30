@@ -7,7 +7,7 @@
 <script>
 async function init() {
 const data = await d3.csv('avocado.csv');
-d3.select('body').selectAll('circle')
+d3.select('svg').selectAll('circle')
   .data(data).enter()
   .append('circle')
   .attr('r', function(d,i) {return d.AveragePrice;}); 
