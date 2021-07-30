@@ -19,12 +19,6 @@ const data = await d3.csv('avocado.csv');
   
   console.log(dataByRegion);
   
-  d3.select('svg').selectAll('circle')
-  .data(dataByRegion).enter()
-  .append('circle')
-  .attr('r', function(d,i) {return d.AveragePrice;})
-  .attr('cx', function(d,i) {return d.TotalVolume/200000;})
-  .attr('cy', function(d,i) {return d.TotalBags/50000;});
   
   // Initialize the circle: all located at the center of the svg area
 var node = d3.select('svg').append("g")
@@ -32,7 +26,7 @@ var node = d3.select('svg').append("g")
   .data(dataByRegion)
   .enter()
   .append("circle")
-    .attr("r", function(d) {return d*25;})
+    .attr("r", function(d) {return d.mean*25;})
     .attr("cx", 150)
     .attr("cy", 150)
     .style("fill", "#69b3a2")
