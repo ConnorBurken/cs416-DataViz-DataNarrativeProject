@@ -31,7 +31,7 @@ var node = svg.selectAll(".node")
    .attr("class", "node");
 
 node.append("circle")
-    .attr("r", function(d) {return +d.value.avg*15;})
+    .attr("r", function(d) {return +d.value.avg*25;})
     .style("fill", "#69b3a2")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#69a2b2")
@@ -39,14 +39,15 @@ node.append("circle")
 
 node.append("svg:text")
     .attr("transform", "translate(0,6)")
-    .text(function(d){return d.key;});
+    .text(function(d){return d.key;})
+    .style("fill", "white");
     
 
   // Features of the forces applied to the nodes:
 var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter().x(500).y(500)) // Attraction to the center of the svg area
     .force("charge", d3.forceManyBody().strength(0.3)) // Nodes are attracted one each other of value is > 0
-    .force("collide", d3.forceCollide().strength(.02).radius(30).iterations(1)) // Force that avoids circle overlapping
+    .force("collide", d3.forceCollide().strength(.03).radius(30).iterations(1)) // Force that avoids circle overlapping
 
 // Apply these forces to the nodes and update their positions.
 // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
