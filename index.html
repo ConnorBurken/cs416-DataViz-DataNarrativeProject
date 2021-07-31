@@ -30,12 +30,22 @@ var node = svg.selectAll(".node")
    .enter().append("g")
    .attr("class", "node");
 
+//Avocado
 node.append("circle")
+    .attr("class","avacado")
     .attr("r", function(d) {return +d.value.avg*30;})
     .style("fill", "#6C8F32")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#356211")
     .style("stroke-width", 4);
+  
+//Avocado pit  
+node.append("circle")
+    .attr("class","pit")
+    .attr("r", function(d) {return +d.value.avg*7;})
+    .style("fill", "#C15C37")
+    .style("fill-opacity", 0.3);
+
 
 node.append("svg:text")
     .attr("transform", "translate(0,6)")
