@@ -31,16 +31,18 @@ var node = svg.selectAll(".node")
    .attr("class", "node");
 
 node.append("circle")
-    .attr("r", function(d) {return +d.value.avg*25;})
+    .attr("r", function(d) {return +d.value.avg*30;})
     .style("fill", "#6C8F32")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#356211")
     .style("stroke-width", 4);
 
 node.append("svg:text")
+    .attr("transform", "translate(0,6)")
     .text(function(d){return d.key;})
     .style("font-size", "0.8em")
-    .attr("transform", "translate(0,6)")
+    .style("margin","auto")
+    .style("text-align","center")
     .style("color","#C15C37");
 
     
