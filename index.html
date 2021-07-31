@@ -104,10 +104,8 @@ function dragended(d) {
   
 function hoverOn(d, i) {
  
-svg.selectAll("rect")
- .append("g")
+svg.append("rect")
  .attr("id", "bubble")
- .append("rect")
  .attr("x", function(d) {return d.x - 30;})
  .attr("y", function(d) {return d.y - 15;})
  .attr("width", 200)
