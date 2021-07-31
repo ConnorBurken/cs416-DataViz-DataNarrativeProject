@@ -31,19 +31,19 @@ var node = svg.selectAll(".node")
    .attr("class", "node");
 
 //Avocado
-node.append("circle")
+node.append("ellipse")
     .attr("class","avacado")
-    .attr("r", function(d) {return +d.value.avg*30;})
+    .attr("rx", function(d) {return +d.value.avg*30;})
+    .attr("ry", function(d) {return +d.value.avg*23;})
     .style("fill", "#6C8F32")
     .style("fill-opacity", 0.3)
     .attr("stroke", "#356211")
     .style("stroke-width", 4);
   
 //Avocado pit  
-node.append("ellipse")
+node.append("circle")
     .attr("class","pit")
-    .attr("rx", function(d) {return +d.value.avg*10;})
-    .attr("ry", function(d) {return +d.value.avg*7;})
+    .attr("r", function(d) {return +d.value.avg*10;})
     .style("fill", "#AA471F")
     .style("fill-opacity", 0.5);
 
