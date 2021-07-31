@@ -18,8 +18,8 @@ var annotations = [
       label: "Empty",
       title: "Empty"
     },
-    x: function() { return d.x - 30; },
-    y: function() { return d.y - 15; },
+    x: 100,
+    y: 100,
     dy: 100,
     dx: 100
   }
@@ -118,8 +118,8 @@ function dragended(d) {
   
 function hoverOn(d, i) {
  
-annotations.attr("x",function() { return xScale(d.x) - 30; })
-           .attr("y", function() { return yScale(d.y) - 15; });
+annotations[0].attr("x",function() { return xScale(d.x) - 30; })
+              .attr("y", function() { return yScale(d.y) - 15; });
   
 
 const makeAnnotations = d3.annotation()
