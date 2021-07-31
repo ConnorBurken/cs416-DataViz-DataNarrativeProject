@@ -108,10 +108,11 @@ svg.append("text")
  .attr("id", "bubble")
  .attr("x", function() {return d.x - 30;})
  .attr("y", function() {return d.y - 15;})
- .style("fill","white")
+ .style("fill","black")
+ .style("background-color", "white")
  .text(function() {return 'Avg. Price: $' + (Math.round(+d.value.avg*100)/100);});
-      
-
+   
+ 
 }
   
 function hoverOut(d, i) {
