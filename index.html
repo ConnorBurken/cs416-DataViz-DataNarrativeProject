@@ -102,17 +102,18 @@ function dragended(d) {
   
 function hoverOn(d, i) {
     // Specify where to put label of text
-    svg.append("text").attr({
-                id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
-                x: function() { return d.x - 30; },
-                y: function() { return d.y - 15; }})
-                     .text("Test");// Value of the text});
+    svg.append("text")
+       .attr("id", "t" + d.x + "-" + d.y + "-" + i) // Create an id for text so we can select it later for removing on mouseout
+       .attr("x", function() { return d.x - 30; })
+       .attr("y", function() { return d.y - 15; })
+       .text("Test");// Value of the text
 }
   
 function hoverOut(d, i) {
    // Select text by id and then remove
    d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  
 }
+  //End of promise
 });
 </script>
 </body>
