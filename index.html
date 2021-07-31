@@ -38,8 +38,8 @@ node.append("circle")
     .style("stroke-width", 4);
 
 node.append("svg:text")
-    .attr("transform", "translate(0,6)")
-    .text(function(d){return d.key;});
+    .text(function(d){return d.key;})
+    .style("font-size", "0.4em");
     
 
   // Features of the forces applied to the nodes:
