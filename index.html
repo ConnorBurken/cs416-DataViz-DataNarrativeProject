@@ -11,20 +11,6 @@
  var height = 1000;
  var margin = 50;
   
-  // Features of the annotation
-var annotations = [
-  {
-    note: {
-      label: "Empty",
-      title: "Empty"
-    },
-    x: 100,
-    y: 100,
-    dy: 100,
-    dx: 100
-  }
-]
-
   var dataByRegion = d3.nest()
   .key(function(d) { return d.region; })
   .rollup(function(v) { return {
@@ -118,21 +104,23 @@ function dragended(d) {
   
 function hoverOn(d, i) {
  
-annotations[0].attr("x",function() { return xScale(d.x) - 30; })
-              .attr("y", function() { return yScale(d.y) - 15; });
-  
-
-const makeAnnotations = d3.annotation()
-  .annotations(annotations)
-
-svg.append("g").call(makeAnnotations).attr("id","bubble");
- 
+svg.selectAll("rect")
+ .append("g")
+ .attr("id", "bubble")
+ .append("rect")
+ .attr("x", function(d) {return d.x - 30;})
+ .attr("y", function(d) {return d.y - 15;})
+ .attr("width", 200)
+ .attr("height",40)
+ .attr("fill","white")
+ .append("text").text(function(d) {return d.AveragePrice;});
+      
     // Specify where to put label of text
     //svg.append("text")
-       //.attr("id", "bubble") // Create an id for text so we can select it later for removing on mouseout
-    //   .attr("x", )
-     //  .attr("y", )
-    //   .text("Test");// Value of the text
+    //.attr("id", "bubble") // Create an id for text so we can select it later for removing on mouseout
+    //.attr("x", )
+    //.attr("y", )
+    //.text("Test");// Value of the text
 }
   
 function hoverOut(d, i) {
