@@ -40,11 +40,12 @@ node.append("circle")
     .style("stroke-width", 4);
   
 //Avocado pit  
-node.append("circle")
+node.append("ellipse")
     .attr("class","pit")
-    .attr("r", function(d) {return +d.value.avg*10;})
-    .style("fill", "#C15C37")
-    .style("fill-opacity", 0.3);
+    .attr("rx", function(d) {return +d.value.avg*10;})
+    .attr("ry", function(d) {return +d.value.avg*7;})
+    .style("fill", "#AA471F")
+    .style("fill-opacity", 0.5);
 
 
 node.append("svg:text")
