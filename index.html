@@ -111,7 +111,7 @@ svg.append("rect")
  .attr("width", 200)
  .attr("height",40)
  .attr("fill","white")
- .append("text").text(function(d) {return d.AveragePrice;});
+ .append("text").text(function() {return 'Avg. Price: $' + d.value.avg;});
       
 
 }
