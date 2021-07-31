@@ -106,19 +106,14 @@ function hoverOn(d, i) {
  
 svg.append("rect")
  .attr("id", "bubble")
- .attr("x", function(d) {return d.x - 30;})
- .attr("y", function(d) {return d.y - 15;})
+ .attr("x", function() {return d.x - 30;})
+ .attr("y", function() {return d.y - 15;})
  .attr("width", 200)
  .attr("height",40)
  .attr("fill","white")
  .append("text").text(function(d) {return d.AveragePrice;});
       
-    // Specify where to put label of text
-    //svg.append("text")
-    //.attr("id", "bubble") // Create an id for text so we can select it later for removing on mouseout
-    //.attr("x", )
-    //.attr("y", )
-    //.text("Test");// Value of the text
+
 }
   
 function hoverOut(d, i) {
