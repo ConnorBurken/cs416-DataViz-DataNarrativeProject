@@ -105,7 +105,7 @@ function hoverOn(d) {
     svg.append("text").attr({
                 id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
                 x: function() { return d.x - 30; },
-                y: function() { return d.y - 15; }).text(function() {
+                y: function() { return d.y - 15; }}).text(function() {
                 return [d.x, d.y];  // Value of the text
             });
 }
