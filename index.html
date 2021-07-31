@@ -45,15 +45,14 @@ node.append("circle")
     .attr("class","pit")
     .attr("r", function(d) {return +d.value.avg*10;})
     .style("fill", "#AA471F")
-    .style("fill-opacity", 0.5);
+    .style("fill-opacity", 0.5)
+    .style("left", "-20px");
 
 
-node.append("svg:text")
+node.append("text")
     .attr("transform", "translate(0,6)")
     .text(function(d){return d.key;})
     .style("font-size", "0.8em")
-    .style("margin","auto")
-    .style("text-align","left")
     .style("color","#C15C37");
 
     
