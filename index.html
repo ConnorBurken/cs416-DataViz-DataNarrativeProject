@@ -10,6 +10,20 @@
  var width = 1000;
  var height = 1000;
  var margin = 50;
+  
+  // Features of the annotation
+var annotations = [
+  {
+    note: {
+      label: "Empty",
+      title: "Empty"
+    },
+    x: function() { return d.x - 30; },
+    y: function() { return d.y - 15; },
+    dy: 100,
+    dx: 100
+  }
+]
 
   var dataByRegion = d3.nest()
   .key(function(d) { return d.region; })
@@ -104,19 +118,9 @@ function dragended(d) {
   
 function hoverOn(d, i) {
  
- // Features of the annotation
-var annotations = [
-  {
-    note: {
-      label: "Here is the annotation label",
-      title: "Annotation title"
-    },
-    x: function() { return d.x - 30; },
-    y: function() { return d.y - 15; },
-    dy: 100,
-    dx: 100
-  }
-]
+annotations.attr("x",function() { return xScale(d.x) - 30; })
+           .attr("y", function() { return yScale(d.y) - 15; });
+  
 
 const makeAnnotations = d3.annotation()
   .annotations(annotations)
