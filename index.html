@@ -108,7 +108,8 @@ svg.append("text")
  .attr("id", "bubble")
  .attr("x", function() {return d.x - 30;})
  .attr("y", function() {return d.y - 15;})
- .text(function() {return 'Avg. Price: $' + d.value.avg;});
+ .style("fill","white")
+ .text(function() {return 'Avg. Price: $' + (Math.round(+d.value.avg*100)/100);});
       
 
 }
