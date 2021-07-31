@@ -102,7 +102,7 @@ function dragended(d) {
   
 function hoverOn(d, i) {
     // Specify where to put label of text
-    d.append("text")
+    svg.append("text")
        .attr("id", "bubble") // Create an id for text so we can select it later for removing on mouseout
        .attr("x", function() { return d.x - 30; })
        .attr("y", function() { return d.y - 15; })
@@ -111,7 +111,7 @@ function hoverOn(d, i) {
   
 function hoverOut(d, i) {
    // Select text by id and then remove
-   d.select("#bubble").remove();  
+   svg.select("#bubble").remove();  
 }
   //End of promise
 });
