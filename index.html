@@ -100,7 +100,7 @@ function dragended(d) {
  d.fy = null;
 }
   
-function hoverOn(d) {
+function hoverOn(d, i) {
     // Specify where to put label of text
     svg.append("text").attr({
                 id: "t" + d.x + "-" + d.y + "-" + i,  // Create an id for text so we can select it later for removing on mouseout
@@ -110,7 +110,7 @@ function hoverOn(d) {
             });
 }
   
-function hoverOut(d) {
+function hoverOut(d, i) {
    // Select text by id and then remove
    d3.select("#t" + d.x + "-" + d.y + "-" + i).remove();  
 }
