@@ -104,14 +104,11 @@ function dragended(d) {
   
 function hoverOn(d, i) {
  
-svg.append("rect")
+svg.append("text")
  .attr("id", "bubble")
  .attr("x", function() {return d.x - 30;})
  .attr("y", function() {return d.y - 15;})
- .attr("width", 200)
- .attr("height",40)
- .attr("fill","white")
- .append("text").text(function() {return 'Avg. Price: $' + d.value.avg;});
+ .text(function() {return 'Avg. Price: $' + d.value.avg;});
       
 
 }
