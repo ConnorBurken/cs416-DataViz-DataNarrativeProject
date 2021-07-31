@@ -1,5 +1,7 @@
 <html>
 <script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+
 <style> circle {fill: lightblue; stroke: black;} </style>
 <svg width=1000 height=1000>
 </svg>
@@ -101,18 +103,40 @@ function dragended(d) {
 }
   
 function hoverOn(d, i) {
+ 
+ // Features of the annotation
+const annotations = [
+  {
+    note: {
+      label: "Here is the annotation label",
+      title: "Annotation title"
+    },
+    x: function() { return d.x - 30; },
+    y: function() { return d.y - 15; },
+    dy: 100,
+    dx: 100
+  }
+]
+
+const makeAnnotations = d3.annotation()
+  .annotations(annotations)
+
+svg.append("g").call(makeAnnotations).attr("id","bubble");
+ 
     // Specify where to put label of text
-    svg.append("text")
-       .attr("id", "bubble") // Create an id for text so we can select it later for removing on mouseout
-       .attr("x", function() { return d.x - 30; })
-       .attr("y", function() { return d.y - 15; })
-       .text("Test");// Value of the text
+    //svg.append("text")
+       //.attr("id", "bubble") // Create an id for text so we can select it later for removing on mouseout
+    //   .attr("x", )
+     //  .attr("y", )
+    //   .text("Test");// Value of the text
 }
   
 function hoverOut(d, i) {
    // Select text by id and then remove
    svg.select("#bubble").remove();  
 }
+  
+
   //End of promise
 });
 </script>
