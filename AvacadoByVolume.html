@@ -57,6 +57,7 @@
       .data(dataByRegion)
       .enter().append("g")
       .attr("class", "node")
+      .attr("id",function(d) {return d.key;})
       .call(d3.drag()
          .on("start", dragstarted)
          .on("drag", dragged)
@@ -68,8 +69,8 @@
      //Avocado
     node.append("ellipse")
         .attr("class","avacado")
-        .attr("rx", function(d) {return +d.value.avg*0.000003;})
-        .attr("ry", function(d) {return +d.value.avg*0.0000023;})
+        .attr("rx", function(d) {return +d.value.avg*0.00003;})
+        .attr("ry", function(d) {return +d.value.avg*0.000023;})
         .style("fill", "#6C8F32")
         .style("fill-opacity", 0.3)
         .attr("stroke", "#356211")
@@ -78,10 +79,10 @@
     //Avocado pit  
     node.append("circle")
         .attr("class","pit")
-        .attr("r", function(d) {return +d.value.avg*0.000001;})
+        .attr("r", function(d) {return +d.value.avg*0.00001;})
         .style("fill", "#AA471F")
         .style("fill-opacity", 0.5)
-        .style("cx", function(d) {return (+d.value.avg*0.000001)-8;});
+        .style("cx", function(d) {return (+d.value.avg*0.00001)-8;});
 
 
     node.append("text")
@@ -89,7 +90,9 @@
         .text(function(d){return d.key;})
         .style("font-size", "0.8em")
         .style("color","#C15C37");
-
+    
+    
+    svg.select("#TotalUS").remove(); //Total volume for the US is too large to scale with the other regions
     
 
   // Features of the forces applied to the nodes:
