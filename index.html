@@ -44,8 +44,8 @@
          count: v.length,
          total: d3.sum(v, function(d) { return d.AveragePrice; }),
          avg: d3.mean(v, function(d) { return d.AveragePrice; }),
-         avgs: function(d) {return d.AveragePrice;},
-         dates: function(d) {return d.Date;}
+         avgs: d.AveragePrice,
+         dates: d.Date
        }; }).entries(data);
   
    console.log(dataByRegion);
