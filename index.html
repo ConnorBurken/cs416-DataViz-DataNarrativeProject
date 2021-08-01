@@ -50,7 +50,15 @@
  
 
    var svg = d3.select("svg");
-
+    
+   // Initialize more details basket
+   svg.append("rect")
+      .attr("x", 1000)
+      .attr("y", 500)
+      .attr("width", "200")
+      .attr("height", "200")
+      .style("fill", "#AA471F");
+            
  
    // Initialize the circle: all located at the center of the svg area
    var node = svg.selectAll(".node")
