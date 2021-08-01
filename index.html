@@ -52,7 +52,9 @@
    var svg = d3.select("svg");
     
    // Initialize more details basket
-   svg.selectAll("rect").append("rect")
+   svg.selectAll("rect")
+      .enter().append("g")
+      .append("rect")
       .attr("x", 1000)
       .attr("y", 800)
       .attr("width", "200")
