@@ -33,19 +33,14 @@
  <svg width=1500 height=1000></svg>
  
  <script>
-      var width = 1000;
-      var height = 1000;
-      var margin = 50;
-  
- 
 
    var svg = d3.select("svg");
    // set the dimensions and margins of the graph
-var margin = {top: 20, right: 20, bottom: 30, left: 50},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
-// parse the date / time
+   // parse the date / time
 var parseTime = d3.timeParse("%d/%b/%y");
 
 // set the ranges
@@ -54,8 +49,8 @@ var y = d3.scaleLinear().range([height, 0]);
 
 // define the line
 var valueline = d3.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
+    .x(function(d) { return x(d.Date); })
+    .y(function(d) { return y(d.AvgPrice); });
 
 // append the svg obgect to the body of the page
 // appends a 'group' element to 'svg'
