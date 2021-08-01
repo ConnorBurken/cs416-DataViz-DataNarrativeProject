@@ -68,8 +68,8 @@
      //Avocado
     node.append("ellipse")
         .attr("class","avacado")
-        .attr("rx", function(d) {return +d.value.avg*0.03;})
-        .attr("ry", function(d) {return +d.value.avg*0.023;})
+        .attr("rx", function(d) {return +d.value.avg*0.003;})
+        .attr("ry", function(d) {return +d.value.avg*0.0023;})
         .style("fill", "#6C8F32")
         .style("fill-opacity", 0.3)
         .attr("stroke", "#356211")
@@ -78,10 +78,10 @@
     //Avocado pit  
     node.append("circle")
         .attr("class","pit")
-        .attr("r", function(d) {return +d.value.avg*0.01;})
+        .attr("r", function(d) {return +d.value.avg*0.001;})
         .style("fill", "#AA471F")
         .style("fill-opacity", 0.5)
-        .style("cx", function(d) {return +d.value.avg*-8;});
+        .style("cx", function(d) {return (+d.value.avg*0.001)*-8;});
 
 
     node.append("text")
