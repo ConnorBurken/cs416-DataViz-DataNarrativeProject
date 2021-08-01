@@ -7,7 +7,7 @@
 <body>
 
  
- <h1>Avocado Average Price By Region In 2015</h1>
+ <h1>Avocado Total Volume By Region In 2015</h1>
  <p>Avocados are a delicious superfood that have only grown in popularity over the last years. 
     This data narrative examines how avocados prices and volume differ by region and by season.</p>
  
@@ -42,8 +42,8 @@
       .key(function(d) { return d.region; })
       .rollup(function(v) { return {
          count: v.length,
-         total: d3.sum(v, function(d) { return d.AveragePrice; }),
-         avg: d3.mean(v, function(d) { return d.AveragePrice; })
+         total: d3.sum(v, function(d) { return d.TotalVolume; }),
+         avg: d3.mean(v, function(d) { return d.TotalVolume; })
        }; }).entries(data);
   
    console.log(dataByRegion);
@@ -136,7 +136,7 @@
             .attr("y", function() {return d.y - 15;})
             .style("fill","black")
             .style("background-color", "white")
-            .text(function() {return 'Avg. Price: $' + (Math.round(+d.value.avg*100)/100);});
+            .text(function() {return 'Avg. Volume: ' + (Math.round(+d.value.avg*100)/100);});
        }
   
       function hoverOut(d, i) {
