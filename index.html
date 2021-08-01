@@ -124,6 +124,7 @@
  
       function dragended(d) {
              if (!d3.event.active) simulation.alphaTarget(0);
+             console.log("fx:  " + d.fx + ", fy: " + d.fy);
              d.fx = null;
              d.fy = null;
        }
