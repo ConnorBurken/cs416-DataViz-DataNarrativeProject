@@ -157,8 +157,8 @@
       function dragended(d) {
              if (!d3.event.active) simulation.alphaTarget(0);
              if ((d.fx >= basket_x) && (d.fx < (basket_x + basket_w)) && (d.fy >= basket_y) && (d.fy < (basket_y + basket_h))){
-                 //console.log("fx:  " + d.fx + ", fy: " + d.fy);
-                 console.log(dataByRegionSeason[d.]);
+                 console.log("fx:  " + d.fx + ", fy: " + d.fy);
+                 //console.log(dataByRegionSeason[d.]);
              }
              d.fx = null;
              d.fy = null;
