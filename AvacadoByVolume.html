@@ -1,0 +1,156 @@
+<html>
+ <head>
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title> Avocado Metrics From 2015 </title>
+ </head>
+<body>
+
+ 
+ <h1>Avocado Average Price By Region In 2015</h1>
+ <p>Avocados are a delicious superfood that have only grown in popularity over the last years. 
+    This data narrative examines how avocados prices and volume differ by region and by season.</p>
+ 
+ <nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Previous">
+        <span aria-hidden="true">&laquo;</span>
+        <span class="sr-only">Previous</span>
+      </a>
+    </li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item">
+      <a class="page-link" href="#" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+        <span class="sr-only">Next</span>
+      </a>
+    </li>
+  </ul>
+</nav> 
+ <svg width=1000 height=1500></svg>
+ 
+ <script>
+   const data = d3.csv('avocado.csv').then(function(data){
+      var width = 1000;
+      var height = 1000;
+      var margin = 50;
+  
+    var dataByRegion = d3.nest()
+      .key(function(d) { return d.region; })
+      .rollup(function(v) { return {
+         count: v.length,
+         total: d3.sum(v, function(d) { return d.AveragePrice; }),
+         avg: d3.mean(v, function(d) { return d.AveragePrice; })
+       }; }).entries(data);
+  
+   console.log(dataByRegion);
+ 
+
+   var svg = d3.select("svg");
+
+ 
+   // Initialize the circle: all located at the center of the svg area
+   var node = svg.selectAll(".node")
+      .data(dataByRegion)
+      .enter().append("g")
+      .attr("class", "node")
+      .call(d3.drag()
+         .on("start", dragstarted)
+         .on("drag", dragged)
+         .on("end", dragended))
+      .on("mouseover", hoverOn)
+      .on("mouseout",  hoverOut);
+      //.on("click", moreDetails); //TODO use this to transition to a bar chart of 
+
+     //Avocado
+    node.append("ellipse")
+        .attr("class","avacado")
+        .attr("rx", function(d) {return +d.value.avg*30;})
+        .attr("ry", function(d) {return +d.value.avg*23;})
+        .style("fill", "#6C8F32")
+        .style("fill-opacity", 0.3)
+        .attr("stroke", "#356211")
+        .style("stroke-width", 4);
+  
+    //Avocado pit  
+    node.append("circle")
+        .attr("class","pit")
+        .attr("r", function(d) {return +d.value.avg*10;})
+        .style("fill", "#AA471F")
+        .style("fill-opacity", 0.5)
+        .style("cx", function(d) {return +d.value.avg*-8;});
+
+
+    node.append("text")
+        .attr("transform", "translate(0,6)")
+        .text(function(d){return d.key;})
+        .style("font-size", "0.8em")
+        .style("color","#C15C37");
+
+    
+
+  // Features of the forces applied to the nodes:
+    var simulation = d3.forceSimulation()
+                       .force("center", d3.forceCenter().x(500).y(500)) // Attraction to the center of the svg area
+                       .force("charge", d3.forceManyBody().strength(0.3)) // Nodes are attracted one each other of value is > 0
+                       .force("collide", d3.forceCollide().strength(.05).radius(50).iterations(1)) // Force that avoids circle overlapping
+
+  // Apply these forces to the nodes and update their positions.
+  // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
+    simulation.nodes(dataByRegion)
+                   .on("tick", function(d){
+                        node
+                            .attr("fx", function(d){ return d.x; })
+                            .attr("fy", function(d){ return d.y; })
+ 
+                        node.attr("transform", function(d){return "translate(" + d.x + ", " + d.y + ")";});
+                     }); 
+
+ 
+ 
+      function dragstarted(d) {
+              if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+              d.fx = d.x;
+              d.fy = d.y;
+       }
+ 
+      function dragged(d) {
+              d.fx = d3.event.x;
+              d.fy = d3.event.y;
+       }
+ 
+      function dragended(d) {
+             if (!d3.event.active) simulation.alphaTarget(0);
+             d.fx = null;
+             d.fy = null;
+       }
+  
+      function hoverOn(d, i) {
+ 
+         svg.append("text")
+            .attr("id", "bubble")
+            .attr("x", function() {return d.x - 30;})
+            .attr("y", function() {return d.y - 15;})
+            .style("fill","black")
+            .style("background-color", "white")
+            .text(function() {return 'Avg. Price: $' + (Math.round(+d.value.avg*100)/100);});
+       }
+  
+      function hoverOut(d, i) {
+         // Select text by id and then remove
+         svg.select("#bubble").remove();  
+      }
+  
+      function moreDetails(d, i) {
+ 
+
+      }
+  
+    //End of promise
+});
+</script>
+</body>
+</html>
