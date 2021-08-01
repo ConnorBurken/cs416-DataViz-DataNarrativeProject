@@ -19,7 +19,7 @@
         <span class="sr-only">Previous</span>
       </a>
     </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="./">1</a></li>
     <li class="page-item"><a class="page-link" href="#">2</a></li>
     <li class="page-item"><a class="page-link" href="#">3</a></li>
     <li class="page-item">
@@ -81,7 +81,7 @@
         .attr("r", function(d) {return +d.value.avg*0.001;})
         .style("fill", "#AA471F")
         .style("fill-opacity", 0.5)
-        .style("cx", function(d) {return (+d.value.avg*0.001)*-8;});
+        .style("cx", function(d) {return (+d.value.avg*0.001)-8;});
 
 
     node.append("text")
