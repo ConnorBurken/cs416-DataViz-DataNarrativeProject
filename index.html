@@ -51,12 +51,19 @@
 
    var svg = d3.select("svg");
     
+
    // Initialize more details basket
+   var basket_x = 1000;
+   var baskey_y = 150;
+   var basket_w = 200;
+   var baskey_h = 200;
+    
    svg.append("rect")
-      .attr("x", 1000)
-      .attr("y", 300)
-      .attr("width", "200")
-      .attr("height", "200")
+      .attr("id","basket")
+      .attr("x", basket_x)
+      .attr("y", basket_y)
+      .attr("width", basket_w)
+      .attr("height", basket_h)
       .style("fill", "#6C8F32")
       .style("fill-opacity", 0.3)
       .attr("stroke", "#AA471F")
@@ -132,10 +139,11 @@
               d.fx = d3.event.x;
               d.fy = d3.event.y;
        }
- 
+    
       function dragended(d) {
              if (!d3.event.active) simulation.alphaTarget(0);
-             console.log("fx:  " + d.fx + ", fy: " + d.fy);
+             if ((d.fx >= basket_x) && (d.fx < (basket_x + basket_w) && (d.fy >= basket_y) && (d.fy < (basket_y + basket_w)) console.log("fx:  " + d.fx + ", fy: " + d.fy);
+             
              d.fx = null;
              d.fy = null;
        }
