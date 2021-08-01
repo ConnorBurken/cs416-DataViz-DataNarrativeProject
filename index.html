@@ -46,16 +46,20 @@
          avg: d3.mean(v, function(d) { return d.AveragePrice; })
        }; }).entries(data);
     
-     var dataByRegionSeason = d3.nest()
-      .key(function(d) { return d.region; })
-      .key(function(d) { return d.season;})
-      .key(function(d) { return d.type;})
-      .rollup(function(v) { return {
-         count: v.length,
-         total: d3.sum(v, function(d) { return d.AveragePrice; }),
-         avg: d3.mean(v, function(d) { return d.AveragePrice; })
-       }; }).entries(data);
+    
+     //var dataByRegionSeason = d3.nest()
+      //.key(function(d) { return d.region; })
+      //.key(function(d) { return d.season;})
+      //.key(function(d) { return d.type;})
+      //.rollup(function(v) { return {
+      //   count: v.length,
+      //   total: d3.sum(v, function(d) { return d.AveragePrice; }),
+      //   avg: d3.mean(v, function(d) { return d.AveragePrice; })
+      // }; }).entries(data);
   
+        
+     var dataByRegionSeason = d3.nest()
+      .key(function(d) { return d.region;}).entries(data);
    console.log(dataByRegionSeason);
  
 
@@ -154,7 +158,7 @@
              if (!d3.event.active) simulation.alphaTarget(0);
              if ((d.fx >= basket_x) && (d.fx < (basket_x + basket_w)) && (d.fy >= basket_y) && (d.fy < (basket_y + basket_h))){
                  //console.log("fx:  " + d.fx + ", fy: " + d.fy);
-                 console.log(dataByRegionSeason[d.key]);
+                 console.log(dataByRegionSeason[d.]);
              }
              d.fx = null;
              d.fy = null;
