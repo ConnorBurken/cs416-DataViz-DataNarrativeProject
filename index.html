@@ -45,8 +45,17 @@
          total: d3.sum(v, function(d) { return d.AveragePrice; }),
          avg: d3.mean(v, function(d) { return d.AveragePrice; })
        }; }).entries(data);
+    
+     var dataByRegionSeason = d3.nest()
+      .key(function(d) { return d.region; })
+      .key(function(d) { return d.season;})
+      .rollup(function(v) { return {
+         count: v.length,
+         total: d3.sum(v, function(d) { return d.AveragePrice; }),
+         avg: d3.mean(v, function(d) { return d.AveragePrice; })
+       }; }).entries(data);
   
-   console.log(dataByRegion);
+   console.log(dataByRegionSeason);
  
 
    var svg = d3.select("svg");
