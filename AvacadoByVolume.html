@@ -78,7 +78,7 @@
     //Avocado pit  
     node.append("circle")
         .attr("class","pit")
-        .attr("r", function(d) {return +d.value.avg*10;})
+        .attr("r", function(d) {return +d.value.avg*0.01;})
         .style("fill", "#AA471F")
         .style("fill-opacity", 0.5)
         .style("cx", function(d) {return +d.value.avg*-8;});
