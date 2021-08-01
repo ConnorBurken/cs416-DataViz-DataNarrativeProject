@@ -1,10 +1,11 @@
 <html>
-<script src='https://d3js.org/d3.v5.min.js'></script>
-<script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
+ <head>
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <title> Avocado Metrics From 2015 </title>
+ </head>
 
-<style> circle {fill: lightblue; stroke: black;} </style>
-<svg width=1000 height=1000>
-</svg>
+<svg width=1000 height=1000></svg>
 <script>
  const data = d3.csv('avocado.csv').then(function(data){
  var width = 1000;
@@ -37,6 +38,7 @@ var node = svg.selectAll(".node")
          .on("end", dragended))
    .on("mouseover", hoverOn)
    .on("mouseout",  hoverOut);
+   //.on("click", moreDetails);
 
 //Avocado
 node.append("ellipse")
@@ -118,6 +120,11 @@ svg.append("text")
 function hoverOut(d, i) {
    // Select text by id and then remove
    svg.select("#bubble").remove();  
+}
+  
+function moreDetails(d, i) {
+ 
+
 }
   
 
