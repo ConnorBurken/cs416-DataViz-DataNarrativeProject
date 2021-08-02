@@ -169,7 +169,8 @@
                                                                         avg: d3.mean(v, function(d) { return d.AveragePrice; })
                                                                         }; }).entries(groupByRegion.get(d.key));
                  console.log(dataAtRegionBySeason);
-                     svg.data(dataAtRegionBySeason)
+                     svg.selectAll('rect')
+                        .data(dataAtRegionBySeason)
                         .enter()
                         .append("rect")
                         .attr("class", "bar")
