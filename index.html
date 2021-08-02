@@ -61,8 +61,8 @@
         
      //var dataByRegionSeason = d3.nest()
       //.key(function(d) { return d.region;}).entries(data);
-   var dataByRegionSeason = d3.group(data, d => d.region);
-   console.log(dataByRegionSeason);
+   var groupByRegion = d3.group(data, d => d.region);
+   console.log(groupByRegion);
  
 
    var svg = d3.select("svg");
@@ -159,8 +159,8 @@
       function dragended(d) {
              if (!d3.event.active) simulation.alphaTarget(0);
              if ((d.fx >= basket_x) && (d.fx < (basket_x + basket_w)) && (d.fy >= basket_y) && (d.fy < (basket_y + basket_h))){
-                 console.log("fx:  " + d.fx + ", fy: " + d.fy);
-                 //console.log(dataByRegionSeason[d.]);
+                 //console.log("fx:  " + d.fx + ", fy: " + d.fy);
+                 console.log(groupByRegion[d.key]);
              }
              d.fx = null;
              d.fy = null;
