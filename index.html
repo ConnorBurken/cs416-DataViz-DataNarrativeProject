@@ -175,9 +175,9 @@
                         .append("rect")
                         .attr("class", "bar")
                         .attr("x", function (d, i) { for (i>0; i < dataAtRegionBySeason.length; i++) {return 1000 + (i * 21);}})
-                        .attr("y", function (d) { return 500 - (+d.value.avg*10);})
+                        .attr("y", function (d) { return 500 - (+d.value.avg*50);})
                         .attr("width", 20)
-                        .attr("height", function (d) {return +d.value.avg*10;});
+                        .attr("height", function (d) {return +d.value.avg*50;});
              }
              d.fx = null;
              d.fy = null;
