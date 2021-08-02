@@ -31,7 +31,8 @@
     </li>
   </ul>
 </nav> 
- <svg width=1500 height=1000></svg>
+ <svg width=1500 height=1000>
+ </svg>
  
  <script>
    const data = d3.csv('avocado.csv').then(function(data){
@@ -168,6 +169,14 @@
                                                                         avg: d3.mean(v, function(d) { return d.AveragePrice; })
                                                                         }; }).entries(groupByRegion.get(d.key));
                  console.log(dataAtRegionBySeason);
+                     svg.data(dataAtRegionBySeason)
+                        .enter()
+                        .append("rect")
+                        .attr("class", "bar")
+                        .attr("x", function (d, i) { for (i>0; i < dataAtRegionBySeason.length; i++) {return i * 21;}})
+                        .attr("y", function (d) { return height - (+d.value.avg*10);})
+                        .attr("width", 20)
+                        .attr("height", function (d) {return +d.value.avg*10;});
              }
              d.fx = null;
              d.fy = null;
