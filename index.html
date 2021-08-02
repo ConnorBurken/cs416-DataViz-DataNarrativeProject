@@ -58,8 +58,9 @@
       // }; }).entries(data);
   
         
-     var dataByRegionSeason = d3.nest()
-      .key(function(d) { return d.region;}).entries(data);
+     //var dataByRegionSeason = d3.nest()
+      //.key(function(d) { return d.region;}).entries(data);
+   var dataByRegionSeason = d3.group(data, d => d.region);
    console.log(dataByRegionSeason);
  
 
