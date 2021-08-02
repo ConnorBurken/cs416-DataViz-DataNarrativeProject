@@ -186,7 +186,7 @@
                         .attr("x", function (d, i) { return 1000 + x(d.key);})
                         .attr("y", function (d) { return y(+d.value.avg);})
                         .attr("width", x.bandwidth())
-                        .attr("height", function (d) {return 200 - (+d.value.avg);})
+                        .attr("height", function (d) {return 500 - (+d.value.avg);})
                         .style("fill", "blue");
               
                        // add the x Axis
