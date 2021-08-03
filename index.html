@@ -1,45 +1,68 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
  <head>
     <script src='https://d3js.org/d3.v5.min.js'></script>
     <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <!-- Load d3-annotation -->
+    <script src="https://rawgit.com/susielu/d3-annotation/master/d3-annotation.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <title> Avocado Metrics From 2015 </title>
+    <title> Avocado Metrics From 2015 to 2018 </title>
  </head>
 <body>
 
- 
- <h1>Avocado Average Price By Region In 2015</h1>
- <p>Avocados are a delicious superfood that have only grown in popularity over the last years. 
+
+ <h1>Avocado Average Price By Region From 2015 to 2018 </h1>
+ <p>Avocados are a delicious superfood that have only grown in popularity over the last years.
     This data narrative examines how avocados prices and volume differ by region and by season.</p>
- 
+
  <nav aria-label="Page navigation example">
   <ul class="pagination">
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Previous">
+      <a class="page-link" href="./" aria-label="Previous">
         <span aria-hidden="true">&laquo;</span>
         <span class="sr-only">Previous</span>
       </a>
     </li>
     <li class="page-item"><a class="page-link" href="./">1</a></li>
     <li class="page-item"><a class="page-link" href="./AvacadoByVolume.html">2</a></li>
-    <li class="page-item"><a class="page-link" href="./AvocadoAvgPriceOverTime.html">3</a></li>
+    <li class="page-item"><a class="page-link" href="./AvacadoByTheBag.html">3</a></li>
     <li class="page-item">
-      <a class="page-link" href="#" aria-label="Next">
+      <a class="page-link" href="./AvacadoByVolume.html" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
         <span class="sr-only">Next</span>
       </a>
     </li>
   </ul>
-</nav> 
+</nav>
  <svg width=1500 height=1000>
  </svg>
- 
+
  <script>
    const data = d3.csv('avocado.csv').then(function(data){
       var width = 1000;
       var height = 1000;
       var margin = 50;
-  
+      var lineCount = 0;
+      var lines = [];
+
+    var parseTime = d3.timeParse("%m/%d/%y");//Function to parse time into JS format
+    // format the data
+    data.forEach(function(d) {
+          d.Date = parseTime(d.Date);
+          d.AveragePrice = +d.AveragePrice;
+      });
+
+    //Prepare line axes
+    // set the ranges
+    var lineWidth = 1400;
+    var lineHeight = 400;
+    var x = d3.scaleTime().range([0, lineWidth]);
+    var y = d3.scaleLinear().range([lineHeight, 0]);
+
+    // Scale the range of the data for line plot
+    x.domain(d3.extent(data, function(d) { return d.Date; }));
+    y.domain([0, d3.max(data, function(d) { return d.AveragePrice; })]);
+
     var dataByRegion = d3.nest()
       .key(function(d) { return d.region; })
       .rollup(function(v) { return {
@@ -47,34 +70,36 @@
          total: d3.sum(v, function(d) { return d.AveragePrice; }),
          avg: d3.mean(v, function(d) { return d.AveragePrice; })
        }; }).entries(data);
-    
-    
-     //var dataByRegionSeason = d3.nest()
-      //.key(function(d) { return d.region; })
-      //.key(function(d) { return d.season;})
-      //.key(function(d) { return d.type;})
-      //.rollup(function(v) { return {
-      //   count: v.length,
-      //   total: d3.sum(v, function(d) { return d.AveragePrice; }),
-      //   avg: d3.mean(v, function(d) { return d.AveragePrice; })
-      // }; }).entries(data);
-  
-        
-     //var dataByRegionSeason = d3.nest()
-      //.key(function(d) { return d.region;}).entries(data);
-   var groupByRegion = d3.group(data, d => d.region);
-   console.log(groupByRegion);
- 
+
+   var groupByRegion = d3.group(data, d => d.region);//Used for bar plots
+   var groupByRegionLine = d3.nest().key(function(d) { return d.region; }).entries(data);//Used for line plots
 
    var svg = d3.select("svg");
-    
+
+   // color palette
+   var res = groupByRegionLine.map(function(d){ return d.key }) // list of group names
+   var color = d3.scaleOrdinal()
+       .domain(res)
+       .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+
+
+   // Add the X Axis
+   svg.append("g")
+       .attr("transform", "translate(50,400)")
+       .call(d3.axisBottom(x));
+
+   // Add the Y Axis
+   svg.append("g")
+       .attr("transform", "translate(50,0)")
+       .call(d3.axisLeft(y));
+
 
    // Initialize more details basket
-   var basket_x = 1000;
-   var basket_y = 150;
-   var basket_w = 200;
-   var basket_h = 200;
-    
+   var basket_x = 1200;
+   var basket_y = 450;
+   var basket_w = 250;
+   var basket_h = 500;
+
    svg.append("rect")
       .attr("id","basket")
       .attr("x", basket_x)
@@ -85,8 +110,8 @@
       .style("fill-opacity", 0.3)
       .attr("stroke", "#AA471F")
       .style("stroke-width", 4);
-            
- 
+
+
    // Initialize the circle: all located at the center of the svg area
    var node = svg.selectAll(".node")
       .data(dataByRegion)
@@ -98,25 +123,34 @@
          .on("end", dragended))
       .on("mouseover", hoverOn)
       .on("mouseout",  hoverOut);
-      //.on("click", moreDetails); //TODO use this to transition to a bar chart of 
+      //.on("click", moreDetails); //TODO use this to transition to a bar chart of
 
      //Avocado
-    node.append("ellipse")
-        .attr("class","avacado")
-        .attr("rx", function(d) {return +d.value.avg*30;})
-        .attr("ry", function(d) {return +d.value.avg*23;})
-        .style("fill", "#6C8F32")
-        .style("fill-opacity", 0.3)
-        .attr("stroke", "#356211")
-        .style("stroke-width", 4);
-  
-    //Avocado pit  
+    node.append('path')
+           .attr('d', 'M 0 0 C 50 55 40 90 0 100 C -40 90 -50 55 0 0')
+           .attr('transform',function(d){ return 'scale(' + (+d.value.avg*0.5) + ')';})
+           .style('fill',"#6C8F32")
+           .style("fill-opacity", 0.3)
+           .style('stroke',"#356211")
+           .style("stroke-width", 4);
+
+    //Avocado inner
+    node.append('path')
+        .attr('d', 'M 0 0 C 50 55 40 90 0 100 C -40 90 -50 55 0 0')
+        .attr('transform',function(d){ return 'translate(0,'+ (+d.value.avg*15) + ') scale(' + (+d.value.avg*0.3) + ')';})
+        .style('fill',"#F2E880")
+        .style("fill-opacity", 0.5)
+        .style('stroke',"#F2E880")
+        .style("stroke-width", 4)
+        .style("stroke-opacity", 0.5);
+
+    //Avocado pit
     node.append("circle")
         .attr("class","pit")
-        .attr("r", function(d) {return +d.value.avg*10;})
+        .attr("r", function(d) {return +d.value.avg*8;})
         .style("fill", "#AA471F")
         .style("fill-opacity", 0.5)
-        .style("cx", function(d) {return +d.value.avg*-8;});
+        .style("cy", function(d) {return +d.value.avg*35;});
 
 
     node.append("text")
@@ -125,13 +159,44 @@
         .style("font-size", "0.8em")
         .style("color","#C15C37");
 
-    
+        // Features of the annotation
+        const annotations = [
+          {
+            note: {
+              label: "Add avocados to the basket to plot.",
+              title: "Avocado Basket"
+            },
+            x: 1200,
+            y: 650,
+            dy: -100,
+            dx: -100
+          },
+          {
+            note: {
+              label: "Forest fires decimate avocados in California",
+              title: "California Forest Fires"
+            },
+            x: 482,
+            y: 400,
+            dy: 50,
+            dx: -100
+          }
+        ]
+
+        // Add annotation to the chart
+      const makeAnnotations = d3.annotation()
+          .annotations(annotations)
+        svg.append("g")
+          .call(makeAnnotations)
+
 
   // Features of the forces applied to the nodes:
     var simulation = d3.forceSimulation()
-                       .force("center", d3.forceCenter().x(500).y(500)) // Attraction to the center of the svg area
+                       .force("center", d3.forceCenter().x(600).y(700)) // Attraction to the center of the svg area
+                       .force("forceY", d3.forceY().strength(.03).y(1500 * .7))
+                       .force("forceX", d3.forceX().strength(.01).x(600))
                        .force("charge", d3.forceManyBody().strength(0.3)) // Nodes are attracted one each other of value is > 0
-                       .force("collide", d3.forceCollide().strength(.05).radius(50).iterations(1)) // Force that avoids circle overlapping
+                       .force("collide", d3.forceCollide().strength(.03).radius(40).iterations(1)) // Force that avoids circle overlapping
 
   // Apply these forces to the nodes and update their positions.
   // Once the force algorithm is happy with positions ('alpha' value is low enough), simulations will stop.
@@ -140,73 +205,52 @@
                         node
                             .attr("fx", function(d){ return d.x; })
                             .attr("fy", function(d){ return d.y; })
- 
-                        node.attr("transform", function(d){return "translate(" + d.x + ", " + d.y + ")";});
-                     }); 
 
- 
- 
+                        node.attr("transform", function(d){return "translate(" + d.x + ", " + d.y + ")";});
+                     });
+
+
+
       function dragstarted(d) {
               if (!d3.event.active) simulation.alphaTarget(0.3).restart();
               d.fx = d.x;
               d.fy = d.y;
        }
- 
+
       function dragged(d) {
               d.fx = d3.event.x;
               d.fy = d3.event.y;
        }
-    
+
       function dragended(d) {
              if (!d3.event.active) simulation.alphaTarget(0);
              if ((d.fx >= basket_x) && (d.fx < (basket_x + basket_w)) && (d.fy >= basket_y) && (d.fy < (basket_y + basket_h))){
                  //console.log("fx:  " + d.fx + ", fy: " + d.fy);
-                 var dataAtRegionBySeason = d3.nest()
-                                              .key(function(d) { return d.season; })
-                                              .rollup(function(v) { return {
-                                                                        count: v.length,
-                                                                        total: d3.sum(v, function(d) { return d.AveragePrice; }),
-                                                                        avg: d3.mean(v, function(d) { return d.AveragePrice; })
-                                                                        }; }).entries(groupByRegion.get(d.key));
-                 
-                     var barKey = d.key;
-                     console.log(dataAtRegionBySeason);
-                     // set the ranges
-                     var x = d3.scaleBand().range([0, 200]).padding(0.1);
-                     var y = d3.scaleLinear().range([200, 0]);
-              
-                     x.domain(dataAtRegionBySeason.map(function(d) { return d.key; }));
-                     y.domain([0, d3.max(dataAtRegionBySeason, function(d) { return +d.value.avg; })]).nice();
-              
-                     svg.selectAll('rect')
-                        .data(dataAtRegionBySeason)
-                        .enter()
-                        .append("rect")
-                        .attr("class", function(d){return barKey + "bar";})
-                        .attr("x", function (d, i) { return 1000 + x(d.key);})
-                        .attr("y", function (d) { return 600 - y(+d.value.avg);})
-                        .attr("width", x.bandwidth())
-                        .attr("height", function (d) {return y(+d.value.avg);})
-                        .style("fill", "blue");
-              
-                       // add the x Axis
-                       svg.append("g")
-                          .attr("transform", "translate(1000,600)")
-                          .call(d3.axisBottom(x));
-                         // add the y Axis
-                       svg.append("g")
-                          .call(d3.axisLeft(y).ticks(3));
+                //moreDetails(d);
+                moreDetailsLine(d);
 
              }else{
-              svg.selectAll( "." + d.key + "bar").remove();
-              
+               if (lines.includes(d.key)){
+                svg.selectAll( "." + d.key + "bar").remove();
+                svg.selectAll( ".line" + d.key + "conv").remove();
+                //svg.selectAll( ".line" + d.key + "org").remove();
+
+                const index = lines.indexOf(d.key);
+                if (index > -1) {
+                    lines.splice(index, 1);
+                }
+
+                lineCount-=1;
+
+              }
+
              }
              d.fx = null;
              d.fy = null;
        }
-  
+
       function hoverOn(d, i) {
- 
+
          svg.append("text")
             .attr("id", "bubble")
             .attr("x", function() {return d.x - 30;})
@@ -215,17 +259,179 @@
             .style("background-color", "white")
             .text(function() {return 'Avg. Price: $' + (Math.round(+d.value.avg*100)/100);});
        }
-  
+
       function hoverOut(d, i) {
          // Select text by id and then remove
-         svg.select("#bubble").remove();  
+         svg.select("#bubble").remove();
       }
-  
+
       function moreDetails(d, i) {
- 
+        var dataAtRegionBySeason = d3.nest()
+                                     .key(function(d) { return d.season; })
+                                     .rollup(function(v) { return {
+                                                               count: v.length,
+                                                               total: d3.sum(v, function(d) { return d.AveragePrice; }),
+                                                               avg: d3.mean(v, function(d) { return d.AveragePrice; })
+                                                               }; }).entries(groupByRegion.get(d.key));
+
+            var barKey = d.key;
+            //console.log(dataAtRegionBySeason);
+            // set the ranges
+            var x = d3.scaleBand().range([0, 200]).padding(0.1);
+            var y = d3.scaleLinear().range([200, 0]);
+
+            x.domain(dataAtRegionBySeason.map(function(d) { return d.key; }));
+            y.domain([0, d3.max(dataAtRegionBySeason, function(d) { return +d.value.avg; })]).nice();
+
+
+            svg.selectAll("." + d.key + "bar")
+               .data(dataAtRegionBySeason)
+               .enter()
+               .append("rect")
+               .attr("class", function(d){return barKey + "bar";})
+               .attr("x", function (d, i) { return 1000 + x(d.key);})
+               .attr("y", function (d) { return 400 + y(+d.value.avg);})
+               .attr("width", x.bandwidth())
+               .style("fill", "blue")
+               .transition().duration(1000)
+               .attr("height", function (d) {return 200 - y(+d.value.avg);});
+
+              // add the x Axis
+              svg.append("g")
+                 .attr("class", function(d){return barKey + "bar";})
+                 .attr("transform", "translate(1000,600)")
+                 .call(d3.axisBottom(x));
+                // add the y Axis
+              svg.append("g")
+                 .attr("class", function(d){return barKey + "bar";})
+                 .attr("transform", "translate(1000,400)")
+                 .call(d3.axisLeft(y).ticks(3));
+
 
       }
-  
+
+  function moreDetailsLine(d, i) {
+
+    if(lines.includes(d.key) == false){
+    lineCount+=1;
+    var region = d.key;
+    lines.push(region);
+    var currentData = groupByRegion.get(d.key);
+    currentData = d3.group(currentData, d=>d.type);
+    var currentDataConv = currentData.get("conventional");
+    var currentDataOrg = currentData.get("organic");
+    currentDataConv = currentDataConv.slice().sort((a, b) => d3.ascending(a.Date, b.Date));
+    currentDataOrg = currentDataOrg.slice().sort((a, b) => d3.ascending(a.Date, b.Date));
+
+    convLine =  d3.line()
+         .x(function(d) { return 50 + x(d.Date); })
+         .y(function(d) { return y(d.AveragePrice); });
+
+    const transitionPath = d3
+         .transition()
+         .duration(2500);
+     // Add the valueline path.
+     var conv = svg.append("path")
+         .data([currentDataConv])
+         .attr("class", "lines line" + region + "conv")
+         .style("fill", "none")
+         .style("stroke", color(region))
+         .style("stroke-width", "5")
+         .attr("d", convLine)
+         .on("mouseover", hoverLineOn)
+         .on("mouseout",  hoverLineOut);;
+
+     var totalLength = conv.node().getTotalLength();
+
+     conv.attr("stroke-dasharray", totalLength)
+      .attr("stroke-dashoffset", totalLength)
+      .transition()
+          .duration(2000)
+          .attr('stroke-dashoffset', 0);
+
+    //  var org = svg.append("path")
+    //      .data([currentDataOrg])
+    //      .attr("class", "lines line" + region + "org")
+    //      .style("fill", "none")
+    //      .style("stroke", color(region))
+    //      //.style("stroke-dasharray","5,5")
+    //      .attr("d", convLine);
+    //
+    //  var totalLength = org.node().getTotalLength();
+    //
+    // org.attr("stroke-dasharray", totalLength)
+    //       .attr("stroke-dashoffset", totalLength)
+    //       .transition()
+    //           .duration(2000)
+    //           .attr("stroke-dasharray","5,5")
+    //           .attr('stroke-dashoffset', 0);
+
+    svg.append("circle")
+       .attr("class", "legendCircle line" + region + "conv")
+       .attr("cx",50)
+       .attr("cy",450 +(lineCount*20))
+       .attr("r", 6)
+       .style("fill", color(region));
+
+    svg.append("text")
+       .attr("class", "legendText line" + region + "conv")
+       .attr("x", 70)
+       .attr("y", 450 +(lineCount*20)).text(region)
+       .style("font-size", "15px")
+       .attr("alignment-baseline","middle");
+
+
+      }
+
+  }
+
+  function hoverLineOn(d, i) {
+
+      var position = Math.round(((d3.event.x-50)/lineWidth)*d.length);
+
+      svg.select('#tooltip').remove();
+
+      svg.append("circle")
+         .attr('id','tooltip')
+         .attr('r', 5)
+         .attr('cx',d3.event.x)
+         .attr('cy', d3.event.y-150)
+         .attr('fill', 'none')
+         .attr('stroke','#000');
+
+      svg.append("rect")
+            .attr('id','tooltip_rect')
+            .attr('height', 50)
+            .attr('width', 150)
+            .attr('x',d3.event.x - 75 )
+            .attr('y', d3.event.y-250)
+            .attr('fill', 'white')
+            .attr('stroke','#000');
+
+      svg.append("text")
+         .attr('id','tooltip_price')
+         .attr('x', d3.event.x - 60)
+         .attr('y',d3.event.y - 230)
+         .text("Avg Price: $" + d[position].AveragePrice);
+
+      svg.append("text")
+            .attr('id','tooltip_date')
+            .attr('x', d3.event.x - 60)
+            .attr('y',d3.event.y - 210)
+            .text("Date: " + (+d[position].Date.getMonth()+1) + '/' + d[position].Date.getDate() + '/' +  d[position].Date.getFullYear());
+
+
+
+
+   }
+
+  function hoverLineOut(d, i) {
+      svg.select('#tooltip').remove();
+      svg.select('#tooltip_rect').remove();
+      svg.select('#tooltip_price').remove();
+      svg.select('#tooltip_date').remove();
+  }
+
     //End of promise
 });
 </script>

@@ -1,16 +1,17 @@
 <html>
  <head>
     <script src='https://d3js.org/d3.v5.min.js'></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title> Avocado Metrics From 2015 </title>
  </head>
 <body>
 
- 
+
  <h1>Avocado Average Price By Region In 2015</h1>
- <p>Avocados are a delicious superfood that have only grown in popularity over the last years. 
+ <p>Avocados are a delicious superfood that have only grown in popularity over the last years.
     This data narrative examines how avocados prices and volume differ by region and by season.</p>
- 
+
  <nav aria-label="Page navigation example">
   <ul class="pagination">
     <li class="page-item">
@@ -21,7 +22,7 @@
     </li>
     <li class="page-item"><a class="page-link" href="./">1</a></li>
     <li class="page-item"><a class="page-link" href="./AvacadoByVolume.html">2</a></li>
-    <li class="page-item"><a class="page-link" href="./AvocadoAvgPriceOverTime.html">3</a></li>
+    <li class="page-item"><a class="page-link" href="./AvacadoByTheBag.html">3</a></li>
     <li class="page-item">
       <a class="page-link" href="#" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
@@ -29,28 +30,24 @@
       </a>
     </li>
   </ul>
-</nav> 
+</nav>
  <svg width=1500 height=1000></svg>
- 
+
  <script>
 
    var svg = d3.select("svg");
    // set the dimensions and margins of the graph
     var margin = {top: 20, right: 20, bottom: 30, left: 50},
-        width = 960 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+        width = 1500 - margin.left - margin.right,
+        height = 1000 - margin.top - margin.bottom;
 
    // parse the date / time
-var parseTime = d3.timeParse("%d/%b/%y");
+var parseTime = d3.timeParse("%m/%d/%y");
 
 // set the ranges
 var x = d3.scaleTime().range([0, width]);
 var y = d3.scaleLinear().range([height, 0]);
 
-// define the line
-var valueline = d3.line()
-    .x(function(d) { return x(d.Date); })
-    .y(function(d) { return y(d.AvgPrice); });
 
 // append the svg obgect to the body of the page
 // appends a 'group' element to 'svg'
@@ -65,21 +62,60 @@ var svg = d3.select("body").append("svg")
 // Get the data
 const data = d3.csv("avocado.csv").then( function(data) {
 
+
+  console.log(data);
+
   // format the data
   data.forEach(function(d) {
       d.Date = parseTime(d.Date);
-      d.AvgPrice = +d.AvgPrice;
+      d.AveragePrice = +d.AveragePrice;
   });
 
   // Scale the range of the data
   x.domain(d3.extent(data, function(d) { return d.Date; }));
-  y.domain([0, d3.max(data, function(d) { return d.AvgPrice; })]);
+  y.domain([0, d3.max(data, function(d) { return d.AveragePrice; })]);
 
-  // Add the valueline path.
-  svg.append("path")
-      .data([data])
-      .attr("class", "line")
-      .attr("d", valueline);
+  var groupByRegion = d3.nest().key(function(d) { return d.region; }).entries(data);
+
+  // color palette
+  var res = groupByRegion.map(function(d){ return d.key }) // list of group names
+  var color = d3.scaleOrdinal()
+      .domain(res)
+      .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+
+  groupByRegion.forEach(function(d) {
+      var region = d.key;
+      var currentData = d.values;
+      currentData = d3.group(currentData, d=>d.type);
+      var currentDataConv = currentData.get("conventional");
+      var currentDataOrg = currentData.get("organic");
+      currentDataConv = currentDataConv.slice().sort((a, b) => d3.ascending(a.Date, b.Date));
+      currentDataOrg = currentDataOrg.slice().sort((a, b) => d3.ascending(a.Date, b.Date));
+      console.log(currentDataConv);
+
+     convLine =  d3.line()
+          .x(function(d) { return x(d.Date); })
+          .y(function(d) { return y(d.AveragePrice); });
+      // Add the valueline path.
+      svg.append("path")
+          .data([currentDataConv])
+          .attr("class", "line")
+          .attr("d", convLine)
+          .style("fill", "none")
+          .style("stroke", color(region));
+
+      svg.append("path")
+          .data([currentDataOrg])
+          .attr("class", "line")
+          .attr("d", convLine)
+          .style("fill", "none")
+          .style("stroke", color(region))
+          .style("stroke-dasharray","5,5");
+  });
+
+
+
+
 
   // Add the X Axis
   svg.append("g")
@@ -91,8 +127,8 @@ const data = d3.csv("avocado.csv").then( function(data) {
       .call(d3.axisLeft(y));
 
 });
-    
-  
+
+
 </script>
 </body>
 </html>
