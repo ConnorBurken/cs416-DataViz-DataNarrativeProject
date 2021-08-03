@@ -376,15 +376,16 @@
 
   function hoverLineOn(d, i) {
 
-      var position = Math.round(((d3.event.x-50)/lineWidth)*d.length);
+      var mouse = d3.mouse(this);
+      var position = Math.round(((mouse[0]-50)/lineWidth)*d.length);
 
       svg.select('#tooltip').remove();
 
       svg.append("circle")
          .attr('id','tooltip')
          .attr('r', 5)
-         .attr('cx',d3.event.x)
-         .attr('cy', d3.event.y-150)
+         .attr('cx',mouse[0])
+         .attr('cy', mouse[1])
          .attr('fill', 'none')
          .attr('stroke','#000');
 
@@ -392,21 +393,21 @@
             .attr('id','tooltip_rect')
             .attr('height', 50)
             .attr('width', 150)
-            .attr('x',d3.event.x - 75 )
-            .attr('y', d3.event.y-250)
+            .attr('x',mouse[0]- 75 )
+            .attr('y', mouse[1]-100)
             .attr('fill', 'white')
             .attr('stroke','#000');
 
       svg.append("text")
          .attr('id','tooltip_price')
-         .attr('x', d3.event.x - 60)
-         .attr('y',d3.event.y - 230)
+         .attr('x', mouse[0]- 60)
+         .attr('y',mouse[1] - 80)
          .text("Avg Price: $" + d[position].AveragePrice);
 
       svg.append("text")
             .attr('id','tooltip_date')
-            .attr('x', d3.event.x - 60)
-            .attr('y',d3.event.y - 210)
+            .attr('x', mouse[0]- 60)
+            .attr('y',mouse[1] - 60)
             .text("Date: " + (+d[position].Date.getMonth()+1) + '/' + d[position].Date.getDate() + '/' +  d[position].Date.getFullYear());
 
    }
