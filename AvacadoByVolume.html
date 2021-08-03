@@ -323,10 +323,12 @@ function hoverOn(d, i) {
   svg.select("." + d.key + "bar").style("fill", "#F2E880");
   svg.select(".hoverText").remove();
 
+  mouse = d3.mouse(this);
+
   svg.append("text")
      .attr("class", "hoverText")
-     .attr("x", d3.event.x)
-     .attr("y", d3.event.y)
+     .attr("x", mouse[0])
+     .attr("y", mouse[1])
      .text("Total: " + Math.round(+d.value.total) + " Avocados");
 
 }
