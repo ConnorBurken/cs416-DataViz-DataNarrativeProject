@@ -82,7 +82,6 @@
        .domain(res)
        .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
 
-
    // Add the X Axis
    svg.append("g")
        .attr("transform", "translate(50,400)")
@@ -92,7 +91,6 @@
    svg.append("g")
        .attr("transform", "translate(50,0)")
        .call(d3.axisLeft(y));
-
 
    // Initialize more details basket
    var basket_x = 1200;
@@ -116,6 +114,7 @@
    var node = svg.selectAll(".node")
       .data(dataByRegion)
       .enter().append("g")
+      .attr('id',function(d){return d.key;})
       .attr("class", "node")
       .call(d3.drag()
          .on("start", dragstarted)
@@ -158,6 +157,10 @@
         .text(function(d){return d.key;})
         .style("font-size", "0.8em")
         .style("color","#C15C37");
+
+    newLine("TotalUS");
+    svg.select("#TotalUS").remove();
+
 
         // Features of the annotation
         const annotations = [
@@ -266,6 +269,7 @@
       }
 
       function moreDetails(d, i) {
+
         var dataAtRegionBySeason = d3.nest()
                                      .key(function(d) { return d.season; })
                                      .rollup(function(v) { return {
@@ -310,13 +314,18 @@
 
       }
 
-  function moreDetailsLine(d, i) {
-
+  function moreDetailsLine(d) {
+    console.log(d);
     if(lines.includes(d.key) == false){
+        newLine(d.key);
+    }
+
+  }
+
+  function newLine(region){
     lineCount+=1;
-    var region = d.key;
     lines.push(region);
-    var currentData = groupByRegion.get(d.key);
+    var currentData = groupByRegion.get(region);
     currentData = d3.group(currentData, d=>d.type);
     var currentDataConv = currentData.get("conventional");
     var currentDataOrg = currentData.get("organic");
@@ -324,47 +333,31 @@
     currentDataOrg = currentDataOrg.slice().sort((a, b) => d3.ascending(a.Date, b.Date));
 
     convLine =  d3.line()
-         .x(function(d) { return 50 + x(d.Date); })
-         .y(function(d) { return y(d.AveragePrice); });
+     .x(function(d) { return 50 + x(d.Date); })
+     .y(function(d) { return y(d.AveragePrice); });
 
-    const transitionPath = d3
-         .transition()
-         .duration(2500);
-     // Add the valueline path.
-     var conv = svg.append("path")
-         .data([currentDataConv])
-         .attr("class", "lines line" + region + "conv")
-         .style("fill", "none")
-         .style("stroke", color(region))
-         .style("stroke-width", "5")
-         .attr("d", convLine)
-         .on("mouseover", hoverLineOn)
-         .on("mouseout",  hoverLineOut);;
+     const transitionPath = d3
+        .transition()
+        .duration(2500);
+
+    // Add the valueline path.
+    var conv = svg.append("path")
+        .data([currentDataConv])
+        .attr("class", "lines line" + region + "conv")
+        .style("fill", "none")
+        .style("stroke", color(region))
+        .style("stroke-width", "5")
+        .attr("d", convLine)
+        .on("mouseover", hoverLineOn)
+        .on("mouseout",  hoverLineOut);;
 
      var totalLength = conv.node().getTotalLength();
 
-     conv.attr("stroke-dasharray", totalLength)
-      .attr("stroke-dashoffset", totalLength)
-      .transition()
-          .duration(2000)
-          .attr('stroke-dashoffset', 0);
-
-    //  var org = svg.append("path")
-    //      .data([currentDataOrg])
-    //      .attr("class", "lines line" + region + "org")
-    //      .style("fill", "none")
-    //      .style("stroke", color(region))
-    //      //.style("stroke-dasharray","5,5")
-    //      .attr("d", convLine);
-    //
-    //  var totalLength = org.node().getTotalLength();
-    //
-    // org.attr("stroke-dasharray", totalLength)
-    //       .attr("stroke-dashoffset", totalLength)
-    //       .transition()
-    //           .duration(2000)
-    //           .attr("stroke-dasharray","5,5")
-    //           .attr('stroke-dashoffset', 0);
+    conv.attr("stroke-dasharray", totalLength)
+        .attr("stroke-dashoffset", totalLength)
+        .transition()
+        .duration(2000)
+        .attr('stroke-dashoffset', 0);
 
     svg.append("circle")
        .attr("class", "legendCircle line" + region + "conv")
@@ -379,10 +372,6 @@
        .attr("y", 450 +(lineCount*20)).text(region)
        .style("font-size", "15px")
        .attr("alignment-baseline","middle");
-
-
-      }
-
   }
 
   function hoverLineOn(d, i) {
@@ -419,9 +408,6 @@
             .attr('x', d3.event.x - 60)
             .attr('y',d3.event.y - 210)
             .text("Date: " + (+d[position].Date.getMonth()+1) + '/' + d[position].Date.getDate() + '/' +  d[position].Date.getFullYear());
-
-
-
 
    }
 
